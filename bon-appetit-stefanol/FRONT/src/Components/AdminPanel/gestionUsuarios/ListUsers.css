@@ -1,0 +1,257 @@
+/* ListarRecetas.css */
+
+/* Contenedor principal */
+.listar-recetas-container {
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.048); /* Fondo más transparente */
+  border-radius: 20px;
+  margin: 0 auto;
+  max-width: 1500px;
+}
+
+/* Título y total de recetas */
+.listar-recetas-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.listar-recetas-title {
+  font-size: 2em;
+}
+
+.listar-recetas-total {
+  font-size: 1.2em;
+}
+
+
+/* Botón agregar receta */
+.listar-recetas-add-btn {
+  margin-bottom: 20px;
+  padding: 15px 30px; /* Aumentar el espacio dentro del botón */
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 8px; /* Aumentar el radio de borde para que se vea más redondeado */
+  cursor: pointer;
+  font-size: 1.2em; /* Aumentar el tamaño del texto */
+}
+
+
+.listar-recetas-add-btn:hover {
+  background-color: #218838;
+}
+
+/* Filtros y búsqueda */
+.listar-recetas-filters {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.listar-recetas-search {
+  flex: 1;
+}
+
+.listar-recetas-search input {
+  width: 130%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Centrar los botones de categorías con la tabla */
+.listar-recetas-category-sort {
+  flex: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.listar-recetas-category-filter {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center; /* Centrar las categorías */
+}
+
+
+.listar-recetas-categoria-card {
+  padding: 10px;
+  background-color: #f8f9fa;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.listar-recetas-categoria-card.active {
+  background-color: #731627;
+  color: white;
+}
+
+.listar-recetas-sort {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.listar-recetas-sort label {
+  margin-right: 10px;
+}
+
+.listar-recetas-sort select {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Tabla de recetas */
+.listar-recetas-table-container {
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 20px;
+}
+
+.listar-recetas-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 auto;
+}
+
+.listar-recetas-table th, .listar-recetas-table td {
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+
+.listar-recetas-table th {
+  background-color: #f8f9fa;
+}
+
+.listar-recetas-imagenes-column {
+  max-width: 150px;
+}
+
+/* Carrusel */
+.listar-recetas-carousel-container {
+  max-width: 150px; 
+}
+
+.listar-recetas-carousel-image {
+  width: 100%;
+  height: auto;
+}
+
+.listar-recetas-no-image-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+  background-color: #f8f9fa;
+  color: #ccc;
+}
+
+/* Botones de acción */
+.listar-recetas-btn {
+  padding: 10px 15px; /* Aumentar el espacio dentro del botón */
+  border: none;
+  border-radius: 8px; /* Aumentar el radio de borde para que se vea más redondeado */
+  cursor: pointer;
+  font-size: 1em; /* Aumentar el tamaño del texto */
+}
+
+
+.listar-recetas-edit-btn {
+  background-color: #ffc107;
+  color: white;
+}
+
+.listar-recetas-edit-btn:hover {
+  background-color: #e0a800;
+}
+
+.listar-recetas-delete-btn {
+  background-color: #dc3545;
+  color: white;
+  margin-left: 10px;
+}
+
+.listar-recetas-delete-btn:hover {
+  background-color: #c82333;
+}
+
+/* Paginación */
+.listar-recetas-pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 5px;
+}
+
+.listar-recetas-page-number {
+  padding: 5px 10px;
+  background-color: #f8f9fa;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.listar-recetas-page-number.active {
+  background-color: #007bff;
+  color: white;
+}
+
+/* Modal */
+.listar-recetas-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.listar-recetas-modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  width: 80%;
+  max-width: 600px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Estilos para el select de roles */
+.listar-recetas-role-select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1em;
+  background-color: #f8f9fa;
+  cursor: pointer;
+}
+
+.listar-recetas-role-select:hover {
+  border-color: #007bff;
+}
+
+.listar-recetas-role-select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.listar-recetas-role-option {
+  padding: 10px;
+}
+
