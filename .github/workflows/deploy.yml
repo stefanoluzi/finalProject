@@ -27,11 +27,12 @@ jobs:
 
     # Deploy to AWS S3-
     - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v2
+      uses: aws-actions/configure-aws-credentials@v1
       with:
+        role-session-name: awssyncsession
         role-to-assume: ${{ secrets.AWS_IAM_ROLE }}
         aws-region: ${{ secrets.AWS_REGION }}
-        audience: sts.amazonaws.com
+
 
     - name: Sync Frontend to S3
       run: aws s3 sync FRONT/dist/ s3://${{ secrets.AWS_BUCKET_NAME }}/
