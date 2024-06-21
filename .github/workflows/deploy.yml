@@ -13,7 +13,7 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    # Build Frontends
+    # Build Frontend
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
@@ -25,12 +25,13 @@ jobs:
     - name: Build Frontend
       run: cd FRONT && npm run build
 
-    # Deploy to AWS S3
+    # Deploy to AWS S3-
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v2
       with:
         role-to-assume: ${{ secrets.AWS_IAM_ROLE }}
         aws-region: ${{ secrets.AWS_REGION }}
+        audience: sts.amazonaws.com
 
     - name: Sync Frontend to S3
       run: aws s3 sync FRONT/dist/ s3://${{ secrets.AWS_BUCKET_NAME }}/
