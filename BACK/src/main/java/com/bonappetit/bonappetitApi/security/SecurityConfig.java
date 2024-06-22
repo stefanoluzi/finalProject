@@ -44,8 +44,8 @@ public class SecurityConfig {
                     http.requestMatchers("/swagger-ui/**").permitAll();
                     http.requestMatchers("/swagger-ui.html").permitAll();
 
-
                     // Config endpoints publicos
+                    http.requestMatchers("/**", "/index.html").permitAll();
                     http.requestMatchers(HttpMethod.POST, "/auth/registro").permitAll();
                     http.requestMatchers(HttpMethod.POST, "/auth/login").permitAll();
                     http.requestMatchers(HttpMethod.GET, "/recetas/listar").permitAll();
@@ -87,6 +87,7 @@ public class SecurityConfig {
                     // Config endpoint no especificados
                     http.anyRequest().denyAll();
                 })
+                .httpBasic(httpBasic -> httpBasic.disable())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

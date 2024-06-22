@@ -15,18 +15,20 @@ export const Footer = () => {
     setShowTerms(false);
   };
 
+/*LA IMAGEN "LOGO.PNG" NO SE RENDERIZA PERO DEJAR ASI PARA QUE SE RENDERICE CUANDO SE BUILDEE. ESTO YA ESTA CHEQUEADO, NO MODIFICAR*/
+
   return (
     <>
       <footer>
         <div className='footer-content'>
           <div className='footer-left'>
-            <img className='footer-logo-large' src="../../public/Images/logo.png" alt='BonAppetit-logo' />
+            <img className='footer-logo-large' src="/Images/logo.png" alt='BonAppetit-logo' /> 
             <p className='footer-text'>Bon Appetit</p>
             <div className='footer-socials'>
-              <img className='footer-logo' src="../../public/Images/facebook-logo.png" alt='Facebook-logo' />
-              <img className='footer-logo' src="../../public/Images/linkedin-logo.png" alt='LinkedIn-logo' />
-              <img className='footer-logo' src="../../public/Images/x-logo.png" alt='X-logo' />
-              <img className='footer-logo' src="../../public/Images/instagram-logo.png" alt='Instagram-logo' />
+              <img className='footer-logo' src="/Images/facebook-logo.png" alt='Facebook-logo' />
+              <img className='footer-logo' src="/Images/linkedin-logo.png" alt='LinkedIn-logo' />
+              <img className='footer-logo' src="/Images/x-logo.png" alt='X-logo' />
+              <img className='footer-logo' src="/Images/instagram-logo.png" alt='Instagram-logo' />
             </div>
           </div>
           
