@@ -3,21 +3,21 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main
+      - stefanol
 
 permissions:
   id-token: write
-  contents: write 
+  contents: write
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    # Build Frontends
+    # Build Frontend
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
@@ -29,14 +29,36 @@ jobs:
     - name: Build Frontend
       run: cd FRONT && npm run build
 
-    # Deploy to AWS S3 -
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v3
+    # Copy frontend build to backend static directory
+    - name: Copy frontend build to backend static directory
+      run: |
+        rm -rf BACK/src/main/resources/static/*
+        cp -r FRONT/dist/* BACK/src/main/resources/static/
+
+    # Set up Java
+    - name: Set up Java
+      uses: actions/setup-java@v3
       with:
-        role-to-assume: ${{ secrets.AWS_IAM_ROLE }}
-        aws-region: ${{ secrets.AWS_REGION }}
-        audience: sts.amazonaws.com
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
 
+    # Build Backend
+    - name: Build backend
+      run: cd BACK && mvn clean package
 
-    - name: Sync Frontend to S3
-      run: aws s3 sync FRONT/dist/ s3://${{ secrets.AWS_BUCKET_NAME }}/
+    # Deploy to EC2
+    - name: Deploy to EC2
+      env:
+        KEY_FILE: ${{ secrets.AWS_KEY_FILE }}
+        HOST: ${{ secrets.AWS_EC2_HOST }}
+        USER: ${{ secrets.AWS_EC2_USER }}
+      run: |
+        echo "$KEY_FILE" | base64 -d > key.pem
+        chmod 600 key.pem
+        scp -o StrictHostKeyChecking=no -i key.pem BACK/target/your-app.jar $USER@$HOST:/home/ec2-user/
+        ssh -o StrictHostKeyChecking-no -i key.pem $USER@$HOST << 'EOF'
+          sudo systemctl stop your-app
+          sudo mv /home/ec2-user/your-app.jar /path/to/your/app/location/
+          sudo systemctl start your-app
+        EOF
