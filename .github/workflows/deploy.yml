@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest  # Usar GitHub-hosted runner
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repository
@@ -58,6 +58,11 @@ jobs:
         cd BACK
         mvn clean package
 
+    # Verify the jar file exists
+    - name: Verify the jar file
+      run: |
+        ls -l BACK/target/
+
     # Deploy to EC2
     - name: Deploy to EC2
       env:
@@ -67,7 +72,7 @@ jobs:
       run: |
         echo "$KEY_FILE" | base64 -d > key.pem
         chmod 600 key.pem
-        scp -o StrictHostKeyChecking=no -i key.pem BACK/target/your-app.jar $USER@$HOST:/home/ec2-user/
+        scp -o StrictHostKeyChecking=no -i key.pem BACK/target/*.jar $USER@$HOST:/home/ec2-user/
         ssh -o StrictHostKeyChecking-no -i key.pem $USER@$HOST << 'EOF'
           export BD_NAME=${{ secrets.BD_NAME }}
           export BD_PASS=${{ secrets.BD_PASS }}
@@ -75,6 +80,6 @@ jobs:
           export JWT_SECRET=${{ secrets.JWT_SECRET }}
           export MAIL_PASS=${{ secrets.MAIL_PASS }}
           sudo systemctl stop your-app.service || true
-          sudo mv /home/ec2-user/your-app.jar /path/to/your/app/location/your-app.jar
+          sudo mv /home/ec2-user/*.jar /path/to/your/app/location/your-app.jar
           sudo systemctl start your-app.service
         EOF
