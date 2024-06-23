@@ -26,24 +26,6 @@ jobs:
         echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> $GITHUB_ENV
         echo "MAIL_PASS=${{ secrets.MAIL_PASS }}" >> $GITHUB_ENV
 
-    # Build Frontend
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '20'
-
-    - name: Install dependencies
-      run: cd FRONT && npm install
-
-    - name: Build Frontend
-      run: cd FRONT && npm run build
-
-    # Copy frontend build to backend static directory
-    - name: Copy frontend build to backend static directory
-      run: |
-        rm -rf BACK/src/main/resources/static/*
-        cp -r FRONT/dist/* BACK/src/main/resources/static/
-
     # Replace environment variables in application.properties
     - name: Replace environment variables in application.properties
       run: |
@@ -87,5 +69,29 @@ jobs:
           sudo mv /home/ec2-user/bonappetitApi-0.0.1-SNAPSHOT.jar /path/to/your/app/location/your-app.jar
           cd /path/to/your/app/location/
           nohup java -jar your-app.jar > /dev/null 2>&1 &
-          sudo systemctl start your-app.service
         EOF
+        rm key.pem
+
+    # Set up Node.js for frontend build
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+
+    - name: Install dependencies
+      run: cd FRONT && npm install
+
+    - name: Build Frontend
+      run: cd FRONT && npm run build
+
+    # Configure AWS credentials
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v3
+      with:
+        role-to-assume: ${{ secrets.AWS_IAM_ROLE }}
+        aws-region: ${{ secrets.AWS_REGION }}
+        audience: sts.amazonaws.com
+
+    # Sync Frontend to S3
+    - name: Sync Frontend to S3
+      run: aws s3 sync FRONT/dist/ s3://${{ secrets.AWS_BUCKET_NAME }}/
