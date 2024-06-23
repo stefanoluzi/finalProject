@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # Usar GitHub-hosted runner
 
     steps:
     - name: Checkout repository
@@ -73,13 +73,13 @@ jobs:
         echo "$KEY_FILE" | base64 -d > key.pem
         chmod 600 key.pem
         scp -o StrictHostKeyChecking=no -i key.pem BACK/target/*.jar $USER@$HOST:/home/ec2-user/
-        ssh -o StrictHostKeyChecking-no -i key.pem $USER@$HOST << 'EOF'
+        ssh -o StrictHostKeyChecking=no -i key.pem $USER@$HOST << 'EOF'
           export BD_NAME=${{ secrets.BD_NAME }}
           export BD_PASS=${{ secrets.BD_PASS }}
           export BD_USER=${{ secrets.BD_USER }}
           export JWT_SECRET=${{ secrets.JWT_SECRET }}
           export MAIL_PASS=${{ secrets.MAIL_PASS }}
           sudo systemctl stop your-app.service || true
-          sudo mv /home/ec2-user/*.jar /path/to/your/app/location/your-app.jar
+          sudo mv /home/ec2-user/bonappetitApi-0.0.1-SNAPSHOT.jar /path/to/your/app/location/your-app.jar
           sudo systemctl start your-app.service
         EOF
