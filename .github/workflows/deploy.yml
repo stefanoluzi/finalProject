@@ -3,7 +3,7 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main
+      - stefanol
 
 permissions:
   id-token: write
@@ -11,11 +11,20 @@ permissions:
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest  # Usar GitHub-hosted runnerr
+    runs-on: ubuntu-latest  # Usar GitHub-hosted runner
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
+
+    # Set environment variables for the build
+    - name: Set environment variables
+      run: |
+        echo "BD_NAME=${{ secrets.BD_NAME }}" >> $GITHUB_ENV
+        echo "BD_USER=${{ secrets.BD_USER }}" >> $GITHUB_ENV
+        echo "BD_PASS=${{ secrets.BD_PASS }}" >> $GITHUB_ENV
+        echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> $GITHUB_ENV
+        echo "MAIL_PASS=${{ secrets.MAIL_PASS }}" >> $GITHUB_ENV
 
     # Build Frontend
     - name: Set up Node.js
@@ -42,10 +51,12 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-        
-    # Build Backend
+
+    # Build Backend with environment variables
     - name: Build backend
-      run: cd BACK && mvn clean package
+      run: |
+        cd BACK
+        mvn clean package
 
     # Deploy to EC2
     - name: Deploy to EC2
@@ -57,7 +68,12 @@ jobs:
         echo "$KEY_FILE" | base64 -d > key.pem
         chmod 600 key.pem
         scp -o StrictHostKeyChecking=no -i key.pem BACK/target/your-app.jar $USER@$HOST:/home/ec2-user/
-        ssh -o StrictHostKeyChecking=no -i key.pem $USER@$HOST << 'EOF'
+        ssh -o StrictHostKeyChecking-no -i key.pem $USER@$HOST << 'EOF'
+          export BD_NAME=${{ secrets.BD_NAME }}
+          export BD_PASS=${{ secrets.BD_PASS }}
+          export BD_USER=${{ secrets.BD_USER }}
+          export JWT_SECRET=${{ secrets.JWT_SECRET }}
+          export MAIL_PASS=${{ secrets.MAIL_PASS }}
           sudo systemctl stop your-app.service || true
           sudo mv /home/ec2-user/your-app.jar /path/to/your/app/location/your-app.jar
           sudo systemctl start your-app.service
