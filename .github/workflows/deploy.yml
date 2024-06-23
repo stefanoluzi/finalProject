@@ -44,6 +44,15 @@ jobs:
         rm -rf BACK/src/main/resources/static/*
         cp -r FRONT/dist/* BACK/src/main/resources/static/
 
+    # Replace environment variables in application.properties
+    - name: Replace environment variables in application.properties
+      run: |
+        sed -i 's|\${BD_NAME}|'$BD_NAME'|g' BACK/src/main/resources/application.properties
+        sed -i 's|\${BD_USER}|'$BD_USER'|g' BACK/src/main/resources/application.properties
+        sed -i 's|\${BD_PASS}|'$BD_PASS'|g' BACK/src/main/resources/application.properties
+        sed -i 's|\${JWT_SECRET}|'$JWT_SECRET'|g' BACK/src/main/resources/application.properties
+        sed -i 's|\${MAIL_PASS}|'$MAIL_PASS'|g' BACK/src/main/resources/application.properties
+
     # Set up Java
     - name: Set up Java
       uses: actions/setup-java@v3
@@ -74,12 +83,9 @@ jobs:
         chmod 600 key.pem
         scp -o StrictHostKeyChecking=no -i key.pem BACK/target/bonappetitApi-0.0.1-SNAPSHOT.jar $USER@$HOST:/home/ec2-user/
         ssh -o StrictHostKeyChecking=no -i key.pem $USER@$HOST << 'EOF'
-          export BD_NAME=${{ secrets.BD_NAME }}
-          export BD_PASS=${{ secrets.BD_PASS }}
-          export BD_USER=${{ secrets.BD_USER }}
-          export JWT_SECRET=${{ secrets.JWT_SECRET }}
-          export MAIL_PASS=${{ secrets.MAIL_PASS }}
           sudo systemctl stop your-app.service || true
           sudo mv /home/ec2-user/bonappetitApi-0.0.1-SNAPSHOT.jar /path/to/your/app/location/your-app.jar
+          cd /path/to/your/app/location/
+          nohup java -jar your-app.jar > /dev/null 2>&1 &
           sudo systemctl start your-app.service
         EOF
