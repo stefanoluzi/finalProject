@@ -25,6 +25,7 @@ jobs:
         echo "BD_PASS=${{ secrets.BD_PASS }}" >> $GITHUB_ENV
         echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> $GITHUB_ENV
         echo "MAIL_PASS=${{ secrets.MAIL_PASS }}" >> $GITHUB_ENV
+        echo "AWS_EC2_HOST=${{ secrets.AWS_EC2_HOST }}" >> $GITHUB_ENV
 
     # Replace environment variables in application.properties
     - name: Replace environment variables in application.properties
@@ -77,6 +78,11 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '20'
+
+    # Replace API endpoint in config.js
+    - name: Replace API endpoint in config.js
+      run: |
+        sed -i 's|http://localhost:8080/|http://'"$AWS_EC2_HOST"':8080/|g' FRONT/src/utils/config.js
 
     - name: Install dependencies
       run: cd FRONT && npm install
