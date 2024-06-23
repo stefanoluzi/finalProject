@@ -3,7 +3,7 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main
+      - stefanol
 
 permissions:
   id-token: write
@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   build-and-deploy:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest  # Usar GitHub-hosted runner
 
     steps:
     - name: Checkout repository
@@ -42,8 +42,8 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-
-    # Build Backendd
+        
+    # Build Backend
     - name: Build backend
       run: cd BACK && mvn clean package
 
@@ -57,8 +57,8 @@ jobs:
         echo "$KEY_FILE" | base64 -d > key.pem
         chmod 600 key.pem
         scp -o StrictHostKeyChecking=no -i key.pem BACK/target/your-app.jar $USER@$HOST:/home/ec2-user/
-        ssh -o StrictHostKeyChecking-no -i key.pem $USER@$HOST << 'EOF'
-          sudo systemctl stop your-app
-          sudo mv /home/ec2-user/your-app.jar /path/to/your/app/location/
-          sudo systemctl start your-app
+        ssh -o StrictHostKeyChecking=no -i key.pem $USER@$HOST << 'EOF'
+          sudo systemctl stop your-app.service || true
+          sudo mv /home/ec2-user/your-app.jar /path/to/your/app/location/your-app.jar
+          sudo systemctl start your-app.service
         EOF
