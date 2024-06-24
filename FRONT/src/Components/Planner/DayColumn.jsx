@@ -12,16 +12,16 @@ const DayColumn = ({
   onDragStart,
   onDragEnd,
 }) => {
-  const [, drop] = useDrop({
-    accept: "RECIPE_CARD",
-    drop: (item) => {
-      moveRecipe(date, item.meal, item.recipe); // Ajusta "meal" según tu lógica
-    },
-  });
+  // const [, drop] = useDrop({
+  //   accept: "RECIPE_CARD",
+  //   drop: (item) => {
+  //     moveRecipe(date, item.meal, item.recipe); // Ajusta "meal" según tu lógica
+  //   },
+  // });
 
   return (
     <Box
-      ref={drop}
+      // ref={drop}
       display="flex"
       flexDirection="column"
       className="day-column"

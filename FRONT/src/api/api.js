@@ -388,3 +388,47 @@ export const getCaracteristicaById = async (caracterisitcaId) => {
     return null;
   }
 };
+
+// Calificar receta
+export const rateRecipe = async (recipeId, puntaje) => {
+  try {
+    const response = await fetch(`${BASE_URL}recetas/${recipeId}/calificar`, {
+      method: "POST",
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ puntaje })
+    });
+
+    if (!response.ok) {
+      throw new Error('Error al calificar la receta');
+    }
+
+    return 'Receta calificada';
+  } catch (error) {
+    console.error('Error al calificar la receta:', error.message);
+    throw error;
+  }
+};
+// Obtener puntaje promedio
+export const getAverageRating = async (recipeId) => {
+  try {
+    const response = await fetch(`${BASE_URL}recetas/${recipeId}/puntaje`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Error al obtener el puntaje promedio');
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error al obtener el puntaje promedio:', error.message);
+    throw error;
+  }
+};

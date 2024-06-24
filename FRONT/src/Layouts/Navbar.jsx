@@ -42,11 +42,6 @@ export const Navbar = () => {
               <li>Panel de administrador</li>
             </Link> 
         }
-        {logged && (
-          <>
-            
-          </>
-        )}
       </ul>
 
       <div className="navbar-right">

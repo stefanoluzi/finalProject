@@ -109,7 +109,7 @@ in
   background-color: var(--colorBlanco);
 }
 
-.btn-login:hover {
+.btn-login:hover, .btn-agendar {
   color: var(--colorBlanco);
   background-color: var(--colorFuente-bordo);
 }
@@ -253,7 +253,7 @@ footer{
 
 /****ESTILOS HOME*****/
 .home {
-  background-color: #171D2B;
+  background-image: url('/Images/fondo-oscuro-simple.png');
   align-items: center;
   /* margin-top: 60px; */
   height: 100%;
@@ -418,29 +418,55 @@ footer{
 
 /*ESTILOS SECCION RECOMENDADOS*/
 .recommended-section {
-  margin-top: 2%;
-  padding: 2% 10% 4% 10%;
-  background-color:var(--colorFondo-hueso);
+  padding: 5% 10% 4% 10%;
+  background: linear-gradient(var(--colorFondo-hueso), rgba(255, 255, 255, 0.5)), 
+              url('/Images/Fondo-claro.png'); /* Ruta a tu imagen de fondo */
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  color: var(--colorBlanco);
 }
-.recommended-grid {
 
+
+.recommended-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Cinco columnas */
-  gap: 10px; /* Espacio entre tarjetas */
+  gap: 30px; /* Espacio entre tarjetas */
+  position: relative;
+  z-index: 2; /* Asegura que el grid esté por encima del fondo */
+  height: 100%;
 }
 
-/* *Esta parte no es necesaria se puede llegar a quitar
-.recommended-section {
-  display: grid; Usar CSS Grid en lugar de Flexbox
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); Distribuir automáticamente las tarjetas en columnas de al menos 250px de ancho
-  gap: 20px; Espacio entre tarjetas
-  padding: 20px; Espacio interno para la sección
+.titulo-recomendados {
+  color: var(--colorFuente-Gold);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  font-size: 13rem;
+  font-weight: bold;
+  z-index: 1; /* Asegura que el texto esté por encima del fondo pero debajo del grid */
 }
-*/
 
-.titulo-recomendados{
-  margin-bottom: 3%;
-  margin-left: 1%;
+.titulo-uno{
+  margin-top: 5%;
+  margin-left: 10%;
+  text-align: left;
+}
+.titulo-tres{
+  margin-left: 10%;
+   text-align: left;
+   margin-bottom: 5%;
+ }
+.titulo-dos{
+  text-align: right;
+  margin-right: 20%;
+}
+
+.titulo-recomendados span {
+  display: block;
 }
 
 /*ESTILO BARRA BUSQUEDA*/
@@ -471,7 +497,7 @@ footer{
   border-radius: 30px; /* Bordes redondeados */
   outline: none; /* Quita el contorno azul al enfocar */
   transition: all 0.3s; /* Transición suave para efectos */
-  color: #f0efef;
+  color:var(--colorFondo-hueso);
 }
 
 .search-bar input:hover,
@@ -955,7 +981,7 @@ footer{
 
 .side-details-container {
   align-items: center;
-  color: var(--colorFondo-hueso);
+  color: var(--colorBlanco);
   font-size: 28px;
   grid-column: 3 / -1;
   background-color: var(--colorFondo-primario); /* Fondo azul */
@@ -1028,7 +1054,7 @@ footer{
 }
 
 .week-container {
-  margin-top: 5%;
+  margin: 5% 0 5% 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1084,6 +1110,7 @@ footer{
 .rating-container {
   margin-top: 5%;
   display: flex;
+  flex-direction: column;
   gap: 10px;
   justify-content: center;
   align-items: center;
@@ -1096,11 +1123,56 @@ footer{
 }
 
 .rating-container .fa-star.fas {
-  color: var(--colorFuente-Gold); /* Estrella llena */
+  color: var(--colorFuente-bordo); /* Estrella llena */
 }
 
 .rating-container .fa-star.far {
   color: var(--colorFondo-primario); /* Estrella vacía */
+}
+
+.average-rating {
+  font-size: 1.5em;
+  margin: 10px 0;
+}
+
+.high-rating {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2em;
+  color: var(--colorFuente-bordo); 
+}
+
+.laurel-leaves {
+  display: flex;
+  align-items: center;
+}
+
+.laurel-leaves i {
+  margin: 0 5px;
+}
+
+.vertical-line {
+  height: 100px;
+  width: 4px;
+  background-color: var(--colorFondo-primario);
+  margin: 0 10px;
+}
+
+.rating-count {
+  text-align: center;
+}
+.evaluation-cant {
+  font-size: 50px;
+  color:var(--colorFondo-primario);
+  margin-top: 5px;
+}
+.evaluation-label {
+  font-size: 20px;
+  color:var(--colorFondo-primario);
+  margin-top: 1px;
+  margin-left: 15px;
+  font-weight: bold;
 }
 
 

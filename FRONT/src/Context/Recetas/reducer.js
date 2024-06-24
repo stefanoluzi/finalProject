@@ -12,6 +12,8 @@ export const reducer = (state, action) => {
             return {...state, favs: state.favs.filter(item => item.id !== action.payload)};
         case 'INIT_FAVS':
             return {...state, favs: action.payload};
+        case 'EDIT_WEEK':
+            return {...state, plannedWeeks: action.payload};
         default:
             return state;
     }

@@ -1,59 +1,74 @@
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useContextGlobal } from "../../Context";
+import dayjs from "dayjs";
 
-const semana = [
-  { day: "L" },
-  { day: "M" },
-  { day: "M" },
-  { day: "J" },
-  { day: "V" },
-  { day: "S" },
-  { day: "D" },
-];
+const RecipeCalendar = () => {
 
-const RecipeCalendar = ({ recipeId }) => {
-  const [selectedDays, setSelectedDays] = useState(() => {
-    const saved = localStorage.getItem("selectedDays");
-    return saved ? JSON.parse(saved) : Array(semana.length).fill(null);
-  });
+  const { state: { recipeSelected, plannedWeeks }, moveRecipe } = useContextGlobal()
+  const [currentWeek, setCurrentWeek] = useState(dayjs().startOf("isoWeek"));
+  const [week, setWeek] = useState([
+    { day: "L", selected: false },
+    { day: "M", selected: false },
+    { day: "M", selected: false },
+    { day: "J", selected: false },
+    { day: "V", selected: false },
+    { day: "S", selected: false },
+    { day: "D", selected: false },
+  ])
+  
+  const getDatesForWeek = (weekStart) => week.map((_, index) => weekStart.add(index, "day"));
+  const dates = getDatesForWeek(currentWeek);
+  const currentWeekStr = currentWeek.format("YYYY-MM-DD");
 
   useEffect(() => {
-    localStorage.setItem("selectedDays", JSON.stringify(selectedDays));
-  }, [selectedDays]);
+    isRecipePlanned(recipeSelected.id)
+  }, [recipeSelected])
 
-  const handleDayClick = (index) => {
-    if (selectedDays[index] && selectedDays[index] === recipeId) {
-      alert("Esta receta ya se encuentra agendada");
-    } else {
-      if (window.confirm("¿Estás seguro de que quieres agendar esta receta?")) {
-        setSelectedDays((prev) => {
-          const newSelectedDays = [...prev];
-          newSelectedDays[index] = recipeId;
-          return newSelectedDays;
-        });
-      }
-    }
+  const isRecipePlanned = ( recipeId ) => {
+    const semanaActual = Object.values(plannedWeeks[currentWeekStr])
+    
+    const newWeek = week.map( (day, i) => {
+      const dia = Object.values(semanaActual[i])
+      const momentoComida = dia.some( comida => comida?.id === recipeId )
+      return {...day, selected: momentoComida}
+    } );
+
+    setWeek(newWeek)
   };
+
+  const handleDayClick = ( selectedDay, selectedIndex ) => {
+    const newWeek = week.map( (day, i) => day.day === selectedDay && i === selectedIndex ? { ...day, selected: !day.selected } : day );
+    setWeek(newWeek)
+  }
+
+  const handleSave = () =>{
+    if(window.confirm('¿Desea guardar esta receta en el calendario?')){
+      dates.map( (day, i) => {
+        if( week[i].selected ) moveRecipe(day, recipeSelected.categorias[0].categorias, recipeSelected)
+
+        const dia = Object.values(plannedWeeks[currentWeekStr])[i]
+        const recetaAgendada = Object.values(dia).some( savedRecipe => savedRecipe?.id === recipeSelected.id )
+        if( !week[i].selected && recetaAgendada) moveRecipe(day, recipeSelected.categorias[0].categorias, null)
+      })
+    }
+  }
 
   return (
     <div className="calendar">
       <h4>¿QUIERES AGENDARLO?</h4>
       <div className="week-container">
-        {semana.map((diaSemana, i) => (
+        {week.map((diaSemana, i) => (
           <div
             key={i}
             className="week-day"
-            style={{
-              backgroundColor:
-                selectedDays[i] === recipeId
-                  ? "var(--colorFuente-bordo)"
-                  : "grey",
-            }}
-            onClick={() => handleDayClick(i)}
+            style={{ backgroundColor: diaSemana.selected ? "var(--colorFondo-hueso)" : "grey", color: diaSemana.selected ? "var(--colorFuente-bordo)": "var(--colorFondo-hueso)", fontWeight: "600"}}
+            onClick={() => handleDayClick(diaSemana.day, i)}
           >
             {diaSemana.day}
           </div>
         ))}
       </div>
+      <button onClick={handleSave} className="navbar-button btn-login btn-agendar">Agendar</button>
     </div>
   );
 };

@@ -14,13 +14,7 @@ const MealArea = ({
   const [{ isOver }, drop] = useDrop({
     accept: "RECIPE_CARD",
     drop: (item) => {
-      console.log("Dropped item:", item);
       if (item.recipe) {
-        console.log(
-          `Dropping item: ${item.recipe.nombre} into ${title} on ${date.format(
-            "YYYY-MM-DD"
-          )}`
-        );
         moveRecipe(date, title, item.recipe);
       } else {
         console.error("Dropped item has no recipe:", item);

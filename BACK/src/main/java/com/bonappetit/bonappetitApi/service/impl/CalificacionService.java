@@ -20,7 +20,7 @@ public class CalificacionService {
     private IRecetaRepository recetaRepository;
 
 
-    public Calificacion calificarReceta(Long recetaId , Integer puntaje) {
+    public Calificacion calificarReceta(Long recetaId, Integer puntaje) {
         Receta receta = recetaRepository.findById(recetaId).orElseThrow(() -> new EntityNotFoundException("Receta no encontrada"));
 
         Calificacion calificacion = new Calificacion();
@@ -30,6 +30,7 @@ public class CalificacionService {
         calificacion = calificacionRepository.save(calificacion);
 
         actualizarPuntajePromedio(recetaId);
+        incrementarCantCalificaciones(recetaId);
 
         return calificacion;
     }
@@ -44,6 +45,15 @@ public class CalificacionService {
         Double puntajePromedio = obtenerPuntajePromedio(recetaId);
         receta.setPuntajePromedio(puntajePromedio);
         recetaRepository.save(receta);
+    }
+    private void incrementarCantCalificaciones(Long recetaId) {
+        Receta receta = recetaRepository.findById(recetaId).orElseThrow(() -> new EntityNotFoundException("Receta no encontrada"));
+        receta.setCantCalificaciones(receta.getCantCalificaciones() + 1);
+        recetaRepository.save(receta);
+    }
+    public Integer obtenerCantCalificaciones(Long recetaId) {
+        Receta receta = recetaRepository.findById(recetaId).orElseThrow(() -> new EntityNotFoundException("Receta no encontrada"));
+        return receta.getCantCalificaciones();
     }
 }
 

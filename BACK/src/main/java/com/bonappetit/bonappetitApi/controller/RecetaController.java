@@ -61,4 +61,10 @@ public class RecetaController {
         Double puntajePromedio = calificacionService.obtenerPuntajePromedio(recetaId);
         return new ResponseEntity<>(puntajePromedio, HttpStatus.OK);
     }
+
+    @GetMapping("/{recetaId}/cantCalificaciones")
+    public ResponseEntity<Integer> obtenerCantCalificaciones(@PathVariable Long recetaId) {
+        Integer cantCalificaciones = calificacionService.obtenerCantCalificaciones(recetaId);
+        return new ResponseEntity<>(cantCalificaciones, HttpStatus.OK);
+    }
 }

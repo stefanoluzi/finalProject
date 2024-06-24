@@ -9,6 +9,7 @@ import {
   faBreadSlice,
   faTint,
 } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 
 const getShortenedName = (name) => {
   if (name.length > 14) {
@@ -46,6 +47,7 @@ const RecipeCard = ({ recipe, onDragStart, onDragEnd, onDelete }) => {
         border: "1px solid grey",
       }}
     >
+      <Link to={`/recipe/${recipe.id}`}>
       <CardContent
         style={{
           flexGrow: 1,
@@ -94,6 +96,8 @@ const RecipeCard = ({ recipe, onDragStart, onDragEnd, onDelete }) => {
           </ul>
         </div>
       </CardContent>
+      </Link>
+
       {onDelete && (
         <IconButton onClick={onDelete} style={{ padding: "5px" }}>
           <DeleteIcon />

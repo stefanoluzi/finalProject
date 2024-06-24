@@ -1,53 +1,44 @@
-import { Route, Routes } from "react-router-dom"
-import { routes } from "../utils/routes"
-import { PublicRoute } from "./PublicRoute"
-import { PrivateRoute } from "./PrivateRoute"
-import { Home } from "../Layouts"
-import { Almuerzo, Cena, Desayuno, Detail, Login, Mediatarde, Register } from "../Components"
-import AdminPanel from "../Layouts/AdminPanel"
-import CrearReceta from "../Components/AdminPanel/gestionRecetas/CrearReceta"
-import MyAccount from "../Components/MyAccount"
-import Favs from "../Layouts/Favs"
+import React from "react";
+import { Route, Routes } from "react-router-dom";
+import { routes } from "../utils/routes";
+import { PublicRoute } from "./PublicRoute";
+import { PrivateRoute } from "./PrivateRoute";
+import { Home } from "../Layouts";
+import { Detail, Login, Register } from "../Components"; // Ajusta esta línea según tus componentes
+import AdminPanel from "../Layouts/AdminPanel";
+import CrearReceta from "../Components/AdminPanel/gestionRecetas/CrearReceta";
+import MyAccount from "../Components/MyAccount";
+import Favs from "../Layouts/Favs";
 import Planner from "../Layouts/Planner";
-import { UserRoute } from "./UserRoute"
-import { Categoria } from "../Layouts/Categoria"
-
-
+import { UserRoute } from "./UserRoute";
+import { Categoria } from "../Layouts/Categoria";
+import { useContextGlobal } from "../Context";
 export const AppRouter = () => {
-  const categoriasRoutes = [
-    { path: 'desayuno', nombre: 'Desayuno'},
-    { path: 'almuerzo', nombre: 'Almuerzo'},
-    { path: 'merienda', nombre: 'Merienda'},
-    { path: 'cena', nombre: 'Cena'},
-    { path: 'sdadsa', nombre: 'Sdadsa'},
-  ]
+  const { categorias } = useContextGlobal();
+
+  if (categorias.length === 0) {
+    return <div>Loading...</div>; // O cualquier componente de carga que prefieras
+  }
 
   return (
     <div className="content"> {/* El contenedor principal para el contenido */}
       <Routes>
         <Route path={routes.home} element={<Home />} />
 
-        {
-          categoriasRoutes.map( (categoria, i) =>
-            <Route key={i} path={categoria.path} element={<Categoria categoriaNombre={categoria.nombre} />} />
-          )
-        }
-
-        {/* <Route path={routes.desayuno} element={<Desayuno />} />
-        <Route path={routes.almuerzo} element={<Almuerzo />} />
-        <Route path={routes.mediatarde} element={<Mediatarde />} /> 
-        <Route path={routes.cena} element={<Cena />} /> */}
+        {categorias.map((categoria, i) => (
+          <Route key={i} path={`/${categoria.categorias.toLowerCase()}`} element={<Categoria categoriaNombre={categoria.categorias} />} />
+        ))}
 
         <Route path={routes.detail} element={<Detail />} />
 
         <Route path={routes.myAccount} element={
           <UserRoute>
-            <MyAccount/>
+            <MyAccount />
           </UserRoute>
         } />
         <Route path={routes.favs} element={
           <UserRoute>
-            <Favs/>
+            <Favs />
           </UserRoute>
         } />
 
@@ -62,22 +53,23 @@ export const AppRouter = () => {
             <CrearReceta />
           </PrivateRoute>
         } /> {/* Página para crear comida */}
-        
+
         <Route path={routes.register} element={
           <PublicRoute>
             <Register />
           </PublicRoute>
-        }/>
+        } />
 
         <Route path="/login" element={
-            <PublicRoute>
-              <Login />
-            </PublicRoute>
-          }>
-        </Route>
-        {/* <Route path="/login" element={<Login />} /> */}
-        <Route path={routes.planner} element={<Planner/>}/>
+          <PublicRoute>
+            <Login />
+          </PublicRoute>
+        } />
+
+        <Route path={routes.planner} element={<Planner />} />
+
+        <Route path="*" element={<h1>Página no encontrada</h1>} /> {/* Ruta de fallback para manejar rutas no definidas */}
       </Routes>
     </div>
-  )
-}
+  );
+};

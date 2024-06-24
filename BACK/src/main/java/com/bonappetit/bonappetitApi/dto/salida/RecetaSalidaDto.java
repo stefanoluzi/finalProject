@@ -20,4 +20,6 @@ public class RecetaSalidaDto {
     private String instrucciones;
     private List<Categoria> categorias;
     private List<Caracteristica> caracteristicas;
+    private Double puntajePromedio;
+    private Integer cantCalificaciones;
 }

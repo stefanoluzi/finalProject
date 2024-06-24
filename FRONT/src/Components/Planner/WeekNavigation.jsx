@@ -20,11 +20,11 @@ const WeekNavigation = ({
   return (
     <div className="week-navigation-container">
       <div className="week-navigation-header">
-        {!isThisWeek && (
-          <IconButton onClick={onPreviousWeek}>
-            <ArrowBack className="white-icon" />
-          </IconButton>
-        )}
+        {/* {!isThisWeek && (
+        )} */}
+        <IconButton onClick={onPreviousWeek}>
+          <ArrowBack className="white-icon" />
+        </IconButton>
         <h3>{`${startOfWeek} - ${endOfWeek}`}</h3>
 
         <IconButton onClick={onNextWeek}>

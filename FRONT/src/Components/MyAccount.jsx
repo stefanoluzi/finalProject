@@ -21,7 +21,6 @@ const MyAccount = () => {
               'Content-Type': 'application/json'
             }
           });
-          
           setUser({
             ...user,
             nombre: response.data.nombre,

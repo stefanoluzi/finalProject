@@ -35,4 +35,6 @@ public class Receta {
     private List<Calificacion> calificaciones;
     @Column(nullable = false)
     private Double puntajePromedio = 0.0;
+    @Column(nullable = false)
+    private Integer cantCalificaciones = 0;
 }
