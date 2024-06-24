@@ -71,7 +71,7 @@ export const ContextProvider = ({ children }) => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/categorias/listar");
+        const response = await axios.get(`${BASE_URL}/categorias/listar`);
         setCategorias(response.data);
       } catch (error) {
         console.error("Error fetching categories:", error);

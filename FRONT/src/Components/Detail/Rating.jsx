@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { BASE_URL } from '../../utils/config';
+
 
 const Rating = ({ recipeId }) => {
   const [rating, setRating] = useState(0);
@@ -22,7 +24,7 @@ const Rating = ({ recipeId }) => {
   }, [recipeId]);
 
   const fetchAverageRating = () => {
-    axios.get(`http://localhost:8080/recetas/${recipeId}/puntaje`)
+    axios.get(`${BASE_URL}recetas/${recipeId}/puntaje`)
       .then(response => {
         setAverageRating(response.data);
       })
@@ -32,12 +34,13 @@ const Rating = ({ recipeId }) => {
   };
 
   const fetchCantRating = () => {
-    axios.get(`http://localhost:8080/recetas/${recipeId}/cantCalificaciones`) 
-      .then(response => {
-        setCantRating(response.data); 
+    axios
+      .get(`${BASE_URL}recetas/${recipeId}/cantCalificaciones`)
+      .then((response) => {
+        setCantRating(response.data);
       })
-      .catch(error => {
-        console.error('Error fetching rating count:', error);
+      .catch((error) => {
+        console.error("Error fetching rating count:", error);
       });
   };
 
@@ -60,16 +63,17 @@ const Rating = ({ recipeId }) => {
   };
 
   const submitRating = (index) => {
-    axios.post(`http://localhost:8080/recetas/${recipeId}/calificar`, null, {
-      params: { puntaje: index }
-    })
-    .then(() => {
-      fetchAverageRating();
-      fetchCantRating();
-    })
-    .catch(error => {
-      console.error('Error submitting rating:', error);
-    });
+    axios
+      .post(`${BASE_URL}recetas/${recipeId}/calificar`, null, {
+        params: { puntaje: index },
+      })
+      .then(() => {
+        fetchAverageRating();
+        fetchCantRating();
+      })
+      .catch((error) => {
+        console.error("Error submitting rating:", error);
+      });
   };
 
   return (
